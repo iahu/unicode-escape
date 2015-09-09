@@ -14,4 +14,3 @@ class UnescapeCommand(sublime_plugin.TextCommand):
 		for sel in sels:
 			t = self.view.substr(sel);
 			self.view.replace(edit, sel, json.loads( '["'+t+'"]' )[0] );
-			# 中文
