@@ -10,6 +10,13 @@ Package Control:
 
 search`escape`
 
+Custom install:
+
+1. Download frome (here)[https://github.com/iahu/escape/archive/master.zip].
+2. unzip and copy the package to sublime packages fold.
+Windows and Linux can find at sublime text menu `Preferences`>`Browse Packages...`
+Mac os x as `Sublime Text`>`Preferences`>`Browse Packages...`
+
 #Usage
 
 Windows:
