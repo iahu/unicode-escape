@@ -1,0 +1,20 @@
+[
+    {
+        "caption": "escape",
+        "mnemonic": "e",
+        "id": "escape",
+        "children":
+        [
+            {
+            	"caption": "escape",
+                "command": "escape",
+                "mnemonic": "e"
+            },
+            {
+            	"caption": "unescape",
+                "command": "unescape",
+                "mnemonic": "u"
+            }
+        ]
+    }
+]
