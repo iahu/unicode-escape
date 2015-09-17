@@ -14,7 +14,8 @@ unescape('\u4e2d\u6587'); // => '中文'
 #Installation
 Package Control:
 
-search`escape`
+search`escape & unescape tool`
+
 
 Custom install:
 
