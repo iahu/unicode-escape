@@ -1,0 +1,3 @@
+## v1.0.4 update message
+
+Fixed trailing comma error during installation for Sublime Text 2.
