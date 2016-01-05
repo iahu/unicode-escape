@@ -1,29 +1,5 @@
 [
     {
-        "caption": "Tools",
-        "mnemonic": "t",
-        "id": "tools",
-        "children":
-        [
-            {
-                "caption": "escape",
-                "mnemonic": "e",
-                "id": "escape",
-                "children":
-                [
-                    {
-                        "command": "escape",
-                        "mnemonic": "e"
-                    },
-                    {
-                        "command": "unescape",
-                        "mnemonic": "u"
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "caption": "Preferences",
         "mnemonic": "n",
         "id": "preferences",
@@ -34,7 +10,7 @@
                 "id": "package-settings",
                 "children": [
                     {
-                        "caption": "escape",
+                        "caption": "Unicode Escape",
                         "children": [
                             {
                                 "command": "open_file",

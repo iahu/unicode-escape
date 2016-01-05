@@ -1,0 +1,4 @@
+## v1.0.5 update message
+
+1. Rename to "unicode escape"
+2. Ignore Line Endings and Tab
