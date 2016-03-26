@@ -14,6 +14,6 @@ class UnescapeCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		sels = self.view.sel();
 		for sel in sels:
-			t = self.view.substr(sel);
+			t = self.view.substr(sel).lower();
 
 			self.view.replace(edit, sel, bytes( t, 'utf-8' ).decode('unicode_escape') );
