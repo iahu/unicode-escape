@@ -6,9 +6,18 @@ __note__: Line Ending and Tab are ignored.
 
 
 e.g.
+```html
+	&#x4e2d;&#x534e; <!-- <=> 中华 -->
+    &#20013;&#33775; <!-- <=> 中華 -->
+```
+
+```css
+	 font-family: '\5b8b\4f53'; // <=> font-family:'宋体'
+```
+
 ```js
-escape('中文'); // => '\u4e2d\u6587'
-unescape('\u4e2d\u6587'); // => '中文'
+	var a = '\u6c49\u5b57'; // <=> a = '汉字';
+	var b = '\u{0001d306}' // <=> b = '𝌆';
 ```
 
 ##Installation

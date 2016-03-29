@@ -1,17 +1,19 @@
 # encoding=utf-8
-import sublime, sublime_plugin, re
+import sublime, sublime_plugin, re, json
 
 class EscapeCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		sels = self.view.sel();
 		syntax = getSyntax();
 		if not isSupportSyntax( syntax ):
+			print( syntax + ' not support');
 			return;
 		for sel in sels:
 			t = self.view.substr(sel);
 			escaped = bytes.decode(t.encode('unicode-escape'));
 			escaped = convert_to_lang_style(escaped, syntax);
-			escaped = escaped.replace(r'\n', '\n').replace(r'\t', '\t');
+			escaped = re.sub(r'(?<!\\)\\n', r'\n', escaped);
+			escaped = re.sub(r'(?<!\\)\\t', r'\t', escaped);
 
 			self.view.replace( edit, sel, escaped );
 
@@ -20,23 +22,38 @@ class UnescapeCommand(sublime_plugin.TextCommand):
 		sels = self.view.sel();
 		syntax = getSyntax();
 		if not isSupportSyntax( syntax ):
+			print( syntax + ' not support');
 			return;
 		for sel in sels:
 			t = self.view.substr(sel);
 			t = convert_to_json_style( t, syntax );
-			self.view.replace(edit, sel, re.sub(r'(\\u[\da-f]{4})', decode, t));
+			t = re.sub(r'(\\u[\da-fA-F]{4}|\\x[\da-fA-F]{2}|\\u\{([\da-fA-F]{1,})\})', decode, t)
+			t = re.sub(r'\\\\', r'\\', t);
+			self.view.replace(edit, sel, t);
 
 def isSupportSyntax(syntax):
-	return not not re.match('''less|scss|sass|css|stylus|postcss|
-		js|jsx|
-		html|xml|haml|slim|jade|xml|
-		python''', syntax );
+	p = re.compile(r'(less|scss|sass|css|stylus|postcss|js|jsx|html|xml|haml|slim|jade|xml|python)');
+	return not not re.match(p, syntax );
 
 # ignore bad style strings.
-def decode(s):
-	if s:
-		return bytes( s.group(0), 'utf-8' ).decode('unicode_escape');
+def decode(g):
+	if g:
+		return _decode(g.group(0));
 	return '';
+
+def _decode(s):
+	return bytes( s, 'utf-8' ).decode('unicode_escape');
+
+def dec_to_hex(s):
+	if s:
+		return r'\u' + re.sub( '^0x', '', hex( int(s.group(1), 10) ));
+	return '';
+
+def decode_es6(g):
+	if g:
+		return _decode(r'\U'+ g.group(1).rjust(8, '0'));
+	return '';
+
 
 def getSyntax():
 	view = sublime.active_window().active_view();
@@ -62,36 +79,39 @@ def getSyntax():
 
 	return syntax;
 
+
 def convert_to_json_style(unicode_escape, syntax):
 	if re.search(r'^(js|jsx|python)$', syntax):
-		return unicode_escape;
+		# support ES6
+		p = r'\\u\{([\da-fA-F]{1,})\}';
+		g = re.match(p, unicode_escape);
+		if g:
+			return re.sub(p, decode_es6, unicode_escape);
+		else:
+			return unicode_escape;
 
 	elif re.search(r'^(less|scss|sass|css|stylus|postcss)$', syntax):
 		return re.sub(r'\\([\da-fA-F]{4})', r'\\u\1', unicode_escape);
 
 	elif re.search(r'^(html|xml|haml|slim|jade|xml)$', syntax):
 		# hex style
-		unicode_escape = re.sub(r'&#x([\da-f]{1,4});', r'\\u\1', unicode_escape);
+		unicode_escape = re.sub(r'&#[xX]([\da-fA-F]{1,4});', r'\\u\1', unicode_escape);
 		# dec style
 		unicode_escape = re.sub(r'&#(\d{1,8});', dec_to_hex, unicode_escape);
 		return unicode_escape;
 
 	return unicode_escape;
 
+
 def convert_to_lang_style(unicode_escape, syntax):
 	if re.search(r'(js|jsx)', syntax):
-		return unicode_escape;
+		# return unicode_escape;
+		return re.sub(r'\\U([\da-fA-F]{8})', r'\\u{\1}', unicode_escape);
 
 	elif re.search(r'(less|scss|sass|css|stylus|postcss)', syntax):
 		return re.sub(r'\\u([\da-fA-F]{4})', r'\\\1', unicode_escape);
 
 	elif re.search(r'(html|xml|haml|slim|jade|xml)', syntax):
-		return re.sub(r'\\u([\da-f]{1,4})', r'&#x\1;', unicode_escape);
+		return re.sub(r'\\u([\da-fA-F]{1,4})', r'&#x\1;', unicode_escape);
 
 	return unicode_escape;
-
-
-def dec_to_hex(s):
-	if s:
-		return r'\u' + re.sub( '^0x', '', hex( int(s.group(1), 10) ));
-	return '';

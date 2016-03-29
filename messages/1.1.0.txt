@@ -1,0 +1,6 @@
+## v1.1.0 update message
+测试
+now support and only support
+	1. HTML(hex style and dec style, but NOT entitles style)
+	2. CSS(font-family property)
+	3. JS()
