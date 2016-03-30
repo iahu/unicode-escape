@@ -14,6 +14,7 @@ class EscapeCommand(sublime_plugin.TextCommand):
 			escaped = convert_to_lang_style(escaped, syntax);
 			escaped = re.sub(r'(?<!\\)\\n', r'\n', escaped);
 			escaped = re.sub(r'(?<!\\)\\t', r'\t', escaped);
+			escaped = re.sub(r'\\\\', r'\\', escaped);
 
 			self.view.replace( edit, sel, escaped );
 
