@@ -46,7 +46,7 @@ Windows:
 Linux/Mac os x:
 ```json
 [
-    {"keys": ["ctrl+escape"], "command": "escape"}
+    {"keys": ["ctrl+escape"], "command": "escape"},
     {"keys": ["ctrl+shift+escape"], "command": "unescape"}
 ]
 ```
