@@ -1,0 +1,3 @@
+## v1.0.6 update message
+
+1. add a default way to covert unknown syntax strings to `\u56fd` style unicode code.
